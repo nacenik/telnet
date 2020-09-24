@@ -10,15 +10,16 @@ import net.oleksin.app.TelnetApplication;
 
 public class Main {
   private ExecutorService executeIt;
-  private final int serverPort = 9819;
+  private final int SERVER_PORT = 9819;
+  private final int NUMBER_OF_POOLS = 2;
 
   public Main() {
-    executeIt = Executors.newFixedThreadPool(2);
+    executeIt = Executors.newFixedThreadPool(NUMBER_OF_POOLS);
   }
 
   public static void main(final String[] args) {
     Main main = new Main();
-    try (ServerSocket serverSocket = new ServerSocket(main.serverPort)) {
+    try (ServerSocket serverSocket = new ServerSocket(main.SERVER_PORT)) {
       System.out.println("Server is working!");
       while (!serverSocket.isClosed()) {
         Socket client = serverSocket.accept();
