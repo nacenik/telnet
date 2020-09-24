@@ -9,6 +9,6 @@ public class EchoCommand implements Command {
 
   @Override
   public void execute(CommandContext commandContext) {
-
+    commandContext.addToOutput(String.join(" ", args));
   }
 }
