@@ -9,10 +9,37 @@ public class CurrentProcessor implements Processor {
 
   @Override
   public boolean isExecutable(String... args) {
-    return true;
+    final String parentDirectory = "..";
+    return !Paths.get(String.join("", args)).isAbsolute()
+            && !args[0].equals(parentDirectory);
   }
 
   @Override
   public void changeDirectory(CommandContext commandContext, String... args) {
+    if (!commandContext.isPathNull()) {
+      Path path = commandContext
+              .getPath()
+              .resolve(Paths.get(String.join("", args)))
+              .toAbsolutePath()
+              .normalize();
+      if (isDirectory(path)) {
+        commandContext.setPath(path);
+        commandContext.addToOutput(commandContext
+                        .getPath()
+                        .toString());
+      } else {
+        printMessage(commandContext);
+      }
+    } else {
+      printMessage(commandContext);
+    }
+  }
+
+  private boolean isDirectory(Path path) {
+    return Files.isDirectory(path);
+  }
+
+  private void printMessage(CommandContext commandContext) {
+    commandContext.addToOutput("Directory not found!");
   }
 }

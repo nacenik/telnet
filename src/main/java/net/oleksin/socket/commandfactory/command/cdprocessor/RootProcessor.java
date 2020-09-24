@@ -9,10 +9,21 @@ public class RootProcessor implements Processor {
   
   @Override
   public boolean isExecutable(String... args) {
-    return true;
+    return Paths.get(String.join("", args)).isAbsolute();
   }
 
   @Override
   public void changeDirectory(CommandContext commandContext, String... args) {
+    Path path = Paths.get(String.join("", args));
+    if (path.isAbsolute() && isDirectory(path)) {
+      commandContext.setPath(path);
+      commandContext.addToOutput(commandContext.getPath().toString());
+    } else {
+      commandContext.addToOutput("Bad name for root!");
+    }
+  }
+
+  private boolean isDirectory(Path path) {
+    return Files.isDirectory(path);
   }
 }
