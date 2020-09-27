@@ -4,23 +4,29 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.oleksin.Context;
 import net.oleksin.socket.client.ClientInfo;
-import net.oleksin.socket.commandfactory.command.Command;
-import net.oleksin.socket.commandfactory.command.CommandContext;
-import net.oleksin.socket.commandfactory.CommandProvider;
+import net.oleksin.socket.command.Command;
+import net.oleksin.socket.command.CommandProviderImpl;
 
 public class TelnetApplication implements Runnable {
-  private CommandContext commandContext;
-  private CommandProvider provider;
+  private Context context;
+  private final CommandProviderImpl provider;
+  private Logger logger;
   private PrintWriter out;
   private Scanner in;
+  private WordReader wordReader;
   
-  private static Socket clientDialog;
+  private final Socket clientDialog;
 
-  public TelnetApplication(Socket client) {
-    TelnetApplication.clientDialog = client;
+  public TelnetApplication(Socket client, CommandProviderImpl provider) {
+    this.logger = Logger.getLogger(this.getClass().getName());
+    this.clientDialog = client;
+    this.provider = provider;
+    this.wordReader = new WordReader();
   }
 
   @Override
@@ -28,21 +34,22 @@ public class TelnetApplication implements Runnable {
     try {
       createAll();
       
-      commandContext.setClientInfo(new ClientInfo(
+      context.setClientInfo(new ClientInfo(
               clientDialog.getLocalAddress().toString(),
               LocalDateTime.now()));
 
-      while (commandContext.isConnectionFlag()) {
+      while (context.isConnected()) {
         talkToUser();
       }
-
-      System.out.println("Client disconnected");
+      
+      logger.log(Level.INFO, "Client disconnected");
+      logger.info("Client disconnected");
       
       closeAll();
       
-      System.out.println("Closing connections and channels - DONE.");
+      logger.info("Closing connections and channels - DONE.");
     } catch (IOException e) {
-      System.out.println(e.getMessage());
+      logger.warning(e.getMessage());
     }
   }
   
@@ -52,9 +59,7 @@ public class TelnetApplication implements Runnable {
   
     printGreeting();
     
-    provider = new CommandProvider();
-    commandContext = new CommandContext(out);
-  
+    context = new Context(out);
   }
   
   private void printGreeting() {
@@ -66,22 +71,10 @@ public class TelnetApplication implements Runnable {
     out.write("-> ");
     out.flush();
     
-    String entry = in.nextLine();
-  
-    System.out.println("READ from message "
-            + Thread.currentThread().getName()
-            + " - "
-            + entry);
-    
-    String[] args = entry.split("\\s");
-    Command command = provider.getCommandFactory(args[0])
-            .getCommand(
-                    Arrays.copyOfRange(
-                            args, 1, args.length));
-  
-    System.out.println("\nServer write to channel "
+    Command command = wordReader.returnCommand(in, provider, logger);
+    logger.info("Server write to channel "
               + Thread.currentThread().getName());
-    command.execute(commandContext);
+    command.execute(context);
     out.flush();
   }
   

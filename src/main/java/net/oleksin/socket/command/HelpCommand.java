@@ -1,10 +1,12 @@
-package net.oleksin.socket.commandfactory.command;
+package net.oleksin.socket.command;
+
+import net.oleksin.Context;
 
 public class HelpCommand implements Command {
   
   @Override
-  public void execute(CommandContext commandContext) {
-    commandContext.addToOutput("|||\tHELP\t|||\n"
+  public void execute(Context context) {
+    context.printLn("|||\tHELP\t|||\n"
             + "cat [filename] | [absolute filepath]\t - \tread file\n"
             + "cd [] | [..] | [absolute path] | [path]\t -\t change current directory\n"
             + "echo [string]\t - \treturn string\n"

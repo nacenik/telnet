@@ -1,8 +1,6 @@
-package net.oleksin.socket.commandfactory;
+package net.oleksin.socket.command;
 
-import net.oleksin.socket.commandfactory.command.Command;
-import net.oleksin.socket.commandfactory.command.ErrorCommand;
-import net.oleksin.socket.commandfactory.command.StatCommand;
+import net.oleksin.CommandFactory;
 
 public class StatCommandFactory implements CommandFactory {
   

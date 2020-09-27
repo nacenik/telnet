@@ -1,17 +1,17 @@
-package net.oleksin.socket.commandfactory.command;
+package net.oleksin;
 
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import net.oleksin.socket.client.ClientInfo;
 
-public class CommandContext {
-  private boolean connectionFlag;
+public class Context {
+  private boolean connected;
   private Path path;
   private ClientInfo clientInfo;
   private PrintWriter out;
 
-  public CommandContext(PrintWriter out) {
-    connectionFlag = true;
+  public Context(PrintWriter out) {
+    connected = true;
     this.out = out;
   }
 
@@ -23,8 +23,8 @@ public class CommandContext {
     this.clientInfo = clientInfo;
   }
 
-  public boolean isConnectionFlag() {
-    return connectionFlag;
+  public boolean isConnected() {
+    return connected;
   }
 
   public Path getPath() {
@@ -39,11 +39,11 @@ public class CommandContext {
     return path == null;
   }
 
-  public void changeConnectionFlag() {
-    connectionFlag = !connectionFlag;
+  public void changeConnected() {
+    connected = false;
   }
 
-  public void addToOutput(String string) {
+  public void printLn(String string) {
     out.printf("%s%n", string);
   }
 }

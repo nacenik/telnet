@@ -1,4 +1,6 @@
-package net.oleksin.socket.commandfactory.command;
+package net.oleksin.socket.command;
+
+import net.oleksin.Context;
 
 public class EchoCommand implements Command {
   private final String[] args;
@@ -8,7 +10,7 @@ public class EchoCommand implements Command {
   }
 
   @Override
-  public void execute(CommandContext commandContext) {
-    commandContext.addToOutput(String.join(" ", args));
+  public void execute(Context context) {
+    context.printLn(String.join(" ", args));
   }
 }
