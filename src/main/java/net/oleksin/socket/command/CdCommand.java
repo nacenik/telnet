@@ -3,19 +3,18 @@ package net.oleksin.socket.command;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import net.oleksin.Context;
 import net.oleksin.socket.command.cdprocessor.ChangeDirCurrentProcessor;
 import net.oleksin.socket.command.cdprocessor.ChangeDirParentProcessor;
 import net.oleksin.socket.command.cdprocessor.ChangeDirProcessor;
 import net.oleksin.socket.command.cdprocessor.ChangeDirRootProcessor;
 
-public class CdCommand implements Command {
+class CdCommand implements Command {
 
   private String[] args;
   private List<ChangeDirProcessor> processors;
 
-  public CdCommand(String[] args) {
+  CdCommand(String[] args) {
     processors = Arrays.asList(
             new ChangeDirCurrentProcessor(),
             new ChangeDirParentProcessor(),

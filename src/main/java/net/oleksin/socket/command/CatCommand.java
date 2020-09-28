@@ -1,38 +1,45 @@
 package net.oleksin.socket.command;
 
-import net.oleksin.Context;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import net.oleksin.Context;
 
-public class CatCommand implements Command {
-  private String[] args;
+class CatCommand implements Command {
+  private final String[] args;
 
-  public CatCommand(String[] args) {
+  CatCommand(String[] args) {
     this.args = args;
   }
 
   @Override
   public void execute(Context context) {
-    Path path = Paths.get(String.join("", args));
-    try {
-      if (path.isAbsolute() && isFile(path)) {
-        readFromAbsolutePathFile(context, path);
-      } else if (!context.isPathNull()) {
-        readFromCurrentPathFile(context, path);
-      } else {
-        printToOut(context);
+    if (args.length == 1) {
+      Path path = Paths.get(args[0]);
+      try {
+        if (path.isAbsolute() && isFile(path)) {
+          readFromAbsolutePathFile(context, path);
+        } else if (!context.isPathNull()) {
+          readFromCurrentPathFile(context, path);
+        } else {
+          printMessage(context, "Bad name for file");
+        }
+      } catch (IOException e) {
+        printMessage(context, "File cannot be read");
       }
-    } catch (IOException e) {
-      context.printLn("File cannot be read");
+    } else {
+      printMessage(context, "Bad name for path");
     }
+  }
+  
+  private void printMessage(Context context, String message) {
+    context.printLn(message);
   }
 
 
   private boolean isFile(Path path) {
-    return Files.notExists(path) || !Files.isDirectory(path);
+    return Files.exists(path) && !Files.isDirectory(path);
   }
 
   private void readFromAbsolutePathFile(Context context, Path path)
@@ -50,12 +57,7 @@ public class CatCommand implements Command {
     if (isFile(newPath)) {
       readFromAbsolutePathFile(context, newPath);
     } else {
-      printToOut(context);
+      printMessage(context, "File not found in current path");
     }
   }
-
-  private void printToOut(Context context) {
-    context.printLn("Bad name for file");
-  }
-
 }

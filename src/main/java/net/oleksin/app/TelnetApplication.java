@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.oleksin.Context;
 import net.oleksin.socket.client.ClientInfo;
@@ -42,7 +41,6 @@ public class TelnetApplication implements Runnable {
         talkToUser();
       }
       
-      logger.log(Level.INFO, "Client disconnected");
       logger.info("Client disconnected");
       
       closeAll();

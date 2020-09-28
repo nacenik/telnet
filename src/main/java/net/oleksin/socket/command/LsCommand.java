@@ -7,10 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Set;
-
 import net.oleksin.Context;
 
-public class LsCommand implements Command {
+class LsCommand implements Command {
+  
   @Override
   public void execute(final Context context) {
     if (context.isPathNull()) {

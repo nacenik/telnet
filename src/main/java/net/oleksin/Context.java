@@ -8,7 +8,7 @@ public class Context {
   private boolean connected;
   private Path path;
   private ClientInfo clientInfo;
-  private PrintWriter out;
+  private final PrintWriter out;
 
   public Context(PrintWriter out) {
     connected = true;

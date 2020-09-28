@@ -2,7 +2,7 @@ package net.oleksin.socket.command;
 
 import net.oleksin.Context;
 
-public class HelpCommand implements Command {
+class HelpCommand implements Command {
   
   @Override
   public void execute(Context context) {

@@ -1,10 +1,9 @@
 package net.oleksin.socket.command;
 
-import net.oleksin.CommandFactory;
-import net.oleksin.CommandProvider;
-
 import java.util.HashMap;
 import java.util.Map;
+import net.oleksin.CommandFactory;
+import net.oleksin.CommandProvider;
 
 public class CommandProviderImpl implements CommandProvider {
   private final Map<String, CommandFactory> factoryMap;

@@ -2,7 +2,7 @@ package net.oleksin.socket.command;
 
 import net.oleksin.Context;
 
-public class ExitCommand implements Command {
+class ExitCommand implements Command {
 
   @Override
   public void execute(Context context) {

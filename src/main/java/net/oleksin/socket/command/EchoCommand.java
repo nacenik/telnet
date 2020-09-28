@@ -2,10 +2,10 @@ package net.oleksin.socket.command;
 
 import net.oleksin.Context;
 
-public class EchoCommand implements Command {
+class EchoCommand implements Command {
   private final String[] args;
 
-  public EchoCommand(String... args) {
+  EchoCommand(String... args) {
     this.args = args;
   }
 
