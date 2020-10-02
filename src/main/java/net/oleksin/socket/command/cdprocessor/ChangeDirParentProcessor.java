@@ -1,15 +1,21 @@
 package net.oleksin.socket.command.cdprocessor;
 
 import net.oleksin.Context;
+import net.oleksin.WorkerWithPathsAndFiles;
 
 public class ChangeDirParentProcessor implements ChangeDirProcessor {
   
+  private WorkerWithPathsAndFiles worker;
+  
+  public ChangeDirParentProcessor(WorkerWithPathsAndFiles worker) {
+    this.worker = worker;
+  }
+  
   @Override
   public boolean isExecutable(String... args) {
-    final String parentFlag = "..";
     return args.length == 0
             || (args.length == 1
-            && args[0].equals(parentFlag));
+            && worker.isParent(args[0]));
   }
 
   @Override

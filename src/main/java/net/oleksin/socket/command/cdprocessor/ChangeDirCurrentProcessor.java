@@ -1,17 +1,22 @@
 package net.oleksin.socket.command.cdprocessor;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import net.oleksin.Context;
+import net.oleksin.WorkerWithPathsAndFiles;
 
 public class ChangeDirCurrentProcessor implements ChangeDirProcessor {
-
+  
+  private WorkerWithPathsAndFiles worker;
+  
+  public ChangeDirCurrentProcessor(WorkerWithPathsAndFiles worker) {
+    this.worker = worker;
+  }
+  
   @Override
   public boolean isExecutable(String... args) {
-    final String parentDirectory = "..";
-    return args.length == 1 && !Paths.get(args[0]).isAbsolute()
-            && !args[0].equals(parentDirectory);
+    return args.length == 1 && !worker.isAbsolute(Paths.get(args[0]))
+            && !worker.isParent(args[0]);
   }
 
   @Override
@@ -22,7 +27,7 @@ public class ChangeDirCurrentProcessor implements ChangeDirProcessor {
               .resolve(Paths.get(args[0]))
               .toAbsolutePath()
               .normalize();
-      if (isDirectory(path)) {
+      if (worker.isDirectory(path)) {
         context.setPath(path);
         context.printLn(context
                         .getPath()
@@ -34,11 +39,7 @@ public class ChangeDirCurrentProcessor implements ChangeDirProcessor {
       printMessage(context);
     }
   }
-
-  private boolean isDirectory(Path path) {
-    return Files.isDirectory(path);
-  }
-
+  
   private void printMessage(Context context) {
     context.printLn("Directory not found!");
   }

@@ -1,16 +1,18 @@
 package net.oleksin.socket.command;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import net.oleksin.Context;
+import net.oleksin.WorkerWithPathsAndFiles;
 
 class CatCommand implements Command {
   private final String[] args;
+  private final WorkerWithPathsAndFiles worker;
 
-  CatCommand(String[] args) {
+  CatCommand(String[] args, WorkerWithPathsAndFiles worker) {
     this.args = args;
+    this.worker = worker;
   }
 
   @Override
@@ -18,7 +20,8 @@ class CatCommand implements Command {
     if (args.length == 1) {
       Path path = Paths.get(args[0]);
       try {
-        if (path.isAbsolute() && isFile(path)) {
+        if (worker.isAbsolute(path)
+                && worker.isFile(path)) {
           readFromAbsolutePathFile(context, path);
         } else if (!context.isPathNull()) {
           readFromCurrentPathFile(context, path);
@@ -36,15 +39,11 @@ class CatCommand implements Command {
   private void printMessage(Context context, String message) {
     context.printLn(message);
   }
-
-
-  private boolean isFile(Path path) {
-    return Files.exists(path) && !Files.isDirectory(path);
-  }
+  
 
   private void readFromAbsolutePathFile(Context context, Path path)
           throws IOException {
-    context.printLn(String.join("\n", Files.readAllLines(path)));
+    context.printLn(String.join("\n", worker.readAllLines(path)));
   }
 
   private void readFromCurrentPathFile(Context context, Path path)
@@ -54,7 +53,7 @@ class CatCommand implements Command {
             .resolve(path)
             .toAbsolutePath()
             .normalize();
-    if (isFile(newPath)) {
+    if (worker.isFile(newPath)) {
       readFromAbsolutePathFile(context, newPath);
     } else {
       printMessage(context, "File not found in current path");
