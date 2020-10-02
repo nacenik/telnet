@@ -1,38 +1,28 @@
 package net.oleksin.socket.command;
 
-import net.oleksin.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import net.oleksin.Context;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ExitCommandTest {
   
   private Context context;
-  private PrintWriter printWriter;
-  private StringWriter stringWriter;
   
   @BeforeEach
   void setUp() {
-    stringWriter = new StringWriter();
-    printWriter = new PrintWriter(stringWriter);
-    context = new Context(printWriter);
+    context = mock(Context.class);
   }
   
   @Test
   void shouldChangeConnectedFlag() {
     String expected = "Goodbye Man! See you soon!\n";
-    Command command = new ExitCommand();
-    
-    assertTrue(context.isConnected());
+    ExitCommand command = new ExitCommand();
     
     command.execute(context);
-    printWriter.flush();
-  
-    assertFalse(context.isConnected());
-    assertEquals(expected, stringWriter.toString());
+    
+    verify(context).changeConnected();
+    verify(context).printLn(expected);
   }
 }

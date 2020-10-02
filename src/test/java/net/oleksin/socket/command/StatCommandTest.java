@@ -11,26 +11,27 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class StatCommandTest {
   
   private Context context;
-  private LocalDateTime localDateTime;
   
   @BeforeEach
   void setUp() {
-    localDateTime = LocalDateTime.now();
-    PrintWriter printWriter = new PrintWriter(OutputStream.nullOutputStream());
-    context = new Context(printWriter);
+    context = mock(Context.class);
   }
   
   @Test
   void shouldPrintClientInfo() {
+    LocalDateTime localDateTime = LocalDateTime.now();
     String ip = "192.0.0.1";
     ClientInfo expected = new ClientInfo(ip, localDateTime);
-    ClientInfo actual = new ClientInfo(ip, localDateTime);
-    context.setClientInfo(actual);
+    StatCommand command = new StatCommand();
     
-    assertEquals(expected, actual);
+    when(context.getClientInfo()).thenReturn(expected);
+    command.execute(context);
+    
+    verify(context).printLn(expected.toString());
   }
 }

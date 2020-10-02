@@ -1,62 +1,70 @@
 package net.oleksin.socket.command.cdprocessor;
 
-import net.oleksin.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Paths;
+import net.oleksin.Context;
+import net.oleksin.WorkerWithPathsAndFiles;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class ChangeDirRootProcessorTest {
   private ChangeDirRootProcessor processor;
   private Context context;
-  private PrintWriter printWriter;
-  private StringWriter stringWriter;
+  private WorkerWithPathsAndFiles worker;
   
   @BeforeEach
   void setUp() {
-    processor = new ChangeDirRootProcessor();
-    stringWriter = new StringWriter();
-    printWriter = new PrintWriter(stringWriter);
-    context = new Context(printWriter);
+    context = mock(Context.class);
+    worker = mock(WorkerWithPathsAndFiles.class);
+    processor = new ChangeDirRootProcessor(worker);
   }
   
   @Test
   void shouldReturnTrue() {
-    assertTrue(processor.isExecutable("/Users"));
+    String path = "/test";
+    when(worker.isAbsolute(any())).thenReturn(true);
+    
+    assertTrue(processor.isExecutable(path));
   }
   
   @Test
   void shouldReturnFalseBecauseEmptyPath() {
     String[] strings = new String[0];
+    when(worker.isAbsolute(any())).thenReturn(false);
     
     assertFalse(processor.isExecutable(strings));
   }
   
   @Test
   void shouldReturnFalseBecauseBadPath() {
-    assertFalse(processor.isExecutable("Users"));
+    String path = "test";
+    when(worker.isAbsolute(any())).thenReturn(false);
+    
+    assertFalse(processor.isExecutable(path.split("\\s")));
+    
+    verify(worker).isAbsolute(any());
   }
   
   @Test
   void shouldChangeDirectory() {
-    context.setPath(Paths.get("/Users/mac"));
-    processor.changeDirectory(context, "/bin");
+    String path = "/bin";
+    when(context.getPath()).thenReturn(Paths.get("/test/test"));
+    when(worker.isDirectory(any())).thenReturn(true);
+    processor.changeDirectory(context, path.split("\\s"));
     
-    assertEquals("/bin", context.getPath().toString());
+    verify(context).setPath(Paths.get(path));
+    verify(worker).isDirectory(any());
   }
   
   @Test
-  void shouldNotChangeDirectory() {
-    context.setPath(Paths.get("/Users/mac"));
-    processor.changeDirectory(context, "bin");
-    printWriter.flush();
-    String message = stringWriter.toString();
-  
-    assertEquals("Bad name for root!\n", message);
-    assertEquals("/Users/mac", context.getPath().toString());
+  void shouldPrintMessage() {
+    String path = "bin";
+    when(context.getPath()).thenReturn(Paths.get("/test/test"));
+    processor.changeDirectory(context, path.split("\\s"));
+    
+    verify(context).printLn("Bad name for root!");
   }
 }

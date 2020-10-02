@@ -1,31 +1,32 @@
 package net.oleksin.socket.command.cdprocessor;
 
-import net.oleksin.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import net.oleksin.Context;
+import net.oleksin.WorkerWithPathsAndFiles;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ChangeDirParentProcessorTest {
   private ChangeDirParentProcessor processor;
   private Context context;
-  private PrintWriter printWriter;
-  private StringWriter stringWriter;
+  private WorkerWithPathsAndFiles worker;
   
   @BeforeEach
   void setUp() {
-    processor = new ChangeDirParentProcessor();
-    stringWriter = new StringWriter();
-    printWriter = new PrintWriter(stringWriter);
-    context = new Context(printWriter);
+    worker = mock(WorkerWithPathsAndFiles.class);
+    processor = new ChangeDirParentProcessor(worker);
+    context = mock(Context.class);
   }
   
   @Test
   void shouldReturnFalseBecauseBadPath() {
-    assertFalse(processor.isExecutable("mac"));
+    String path = "test";
+    
+    assertFalse(processor.isExecutable(path));
   }
   
   @Test
@@ -37,32 +38,35 @@ class ChangeDirParentProcessorTest {
   
   @Test
   void shouldReturnTrue() {
-    assertTrue(processor.isExecutable(".."));
+    String path = "..";
+    
+    assertTrue(processor.isExecutable(path));
   }
   
   @Test
   void shouldChangePath() {
-    context.setPath(Paths.get("/Users"));
+    Path expected = Paths.get("/test");
+    when(context.getPath()).thenReturn(Paths.get("/test/test"));
     processor.changeDirectory(context, "..");
     
-    assertEquals("/", context.getPath().toString());
+    verify(context).setPath(expected);
   }
   
   @Test
   void shouldNotChangePath() {
-    context.setPath(Paths.get("/"));
+    when(context.getPath()).thenReturn(Paths.get("/"));
     processor.changeDirectory(context, "..");
-    
-    assertEquals("/", context.getPath().toString());
+  
+    verify(context, times(0)).setPath(any());
   }
   
   @Test
   void shouldPrintMessage() {
-    processor.changeDirectory(context, "..");
-  
-    printWriter.flush();
-    String message = stringWriter.toString();
+    String path = "test";
+    when(context.isPathNull()).thenReturn(true);
+    processor.changeDirectory(context, path.split("\\s"));
     
-    assertEquals("Directory not exist!\n", message);
+    verify(context).isPathNull();
+    verify(context).printLn("Directory not exist!");
   }
 }

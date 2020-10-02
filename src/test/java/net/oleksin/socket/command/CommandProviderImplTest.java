@@ -1,9 +1,9 @@
 package net.oleksin.socket.command;
 
-import net.oleksin.CommandFactory;
-import net.oleksin.CommandProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import net.oleksin.CommandFactory;
+import net.oleksin.CommandProvider;
 
 import static org.junit.jupiter.api.Assertions.*;
 
