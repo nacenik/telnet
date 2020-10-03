@@ -3,19 +3,19 @@ package net.oleksin.socket.command;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 import static org.mockito.Mockito.*;
 
 class CdCommandTest {
   
   private Context context;
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
   
   @BeforeEach
   void setUp() {
     context = mock(Context.class);
-    worker = mock(WorkerWithPathsAndFiles.class);
+    worker = mock(PathsAndFilesWorker.class);
   }
   
   @Test

@@ -3,13 +3,13 @@ package net.oleksin.socket.command.cdprocessor;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 public class ChangeDirCurrentProcessor implements ChangeDirProcessor {
   
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
   
-  public ChangeDirCurrentProcessor(WorkerWithPathsAndFiles worker) {
+  public ChangeDirCurrentProcessor(PathsAndFilesWorker worker) {
     this.worker = worker;
   }
   

@@ -1,13 +1,13 @@
 package net.oleksin.socket.command.cdprocessor;
 
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 public class ChangeDirParentProcessor implements ChangeDirProcessor {
   
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
   
-  public ChangeDirParentProcessor(WorkerWithPathsAndFiles worker) {
+  public ChangeDirParentProcessor(PathsAndFilesWorker worker) {
     this.worker = worker;
   }
   

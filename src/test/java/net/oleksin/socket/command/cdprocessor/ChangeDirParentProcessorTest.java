@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -13,11 +13,11 @@ import static org.mockito.Mockito.*;
 class ChangeDirParentProcessorTest {
   private ChangeDirParentProcessor processor;
   private Context context;
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
   
   @BeforeEach
   void setUp() {
-    worker = mock(WorkerWithPathsAndFiles.class);
+    worker = mock(PathsAndFilesWorker.class);
     processor = new ChangeDirParentProcessor(worker);
     context = mock(Context.class);
   }

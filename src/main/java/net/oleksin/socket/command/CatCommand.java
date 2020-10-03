@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 class CatCommand implements Command {
   private final String[] args;
-  private final WorkerWithPathsAndFiles worker;
+  private final PathsAndFilesWorker worker;
 
-  CatCommand(String[] args, WorkerWithPathsAndFiles worker) {
+  CatCommand(String[] args, PathsAndFilesWorker worker) {
     this.args = args;
     this.worker = worker;
   }

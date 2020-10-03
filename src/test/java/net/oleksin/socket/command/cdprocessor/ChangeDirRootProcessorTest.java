@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,12 +13,12 @@ import static org.mockito.Mockito.*;
 class ChangeDirRootProcessorTest {
   private ChangeDirRootProcessor processor;
   private Context context;
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
   
   @BeforeEach
   void setUp() {
     context = mock(Context.class);
-    worker = mock(WorkerWithPathsAndFiles.class);
+    worker = mock(PathsAndFilesWorker.class);
     processor = new ChangeDirRootProcessor(worker);
   }
   

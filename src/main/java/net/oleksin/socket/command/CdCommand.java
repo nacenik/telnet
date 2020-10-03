@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import net.oleksin.Context;
-import net.oleksin.WorkerWithPathsAndFiles;
+import net.oleksin.PathsAndFilesWorker;
 import net.oleksin.socket.command.cdprocessor.ChangeDirCurrentProcessor;
 import net.oleksin.socket.command.cdprocessor.ChangeDirParentProcessor;
 import net.oleksin.socket.command.cdprocessor.ChangeDirProcessor;
@@ -13,9 +13,9 @@ import net.oleksin.socket.command.cdprocessor.ChangeDirRootProcessor;
 class CdCommand implements Command {
 
   private String[] args;
-  private WorkerWithPathsAndFiles worker;
+  private PathsAndFilesWorker worker;
 
-  CdCommand(String[] args, WorkerWithPathsAndFiles worker) {
+  CdCommand(String[] args, PathsAndFilesWorker worker) {
     this.args = args;
     this.worker = worker;
   }

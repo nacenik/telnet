@@ -9,14 +9,14 @@ import java.util.logging.Logger;
 import net.oleksin.app.TelnetApplication;
 import net.oleksin.socket.command.CommandProviderImpl;
 
-public class TelnetStart {
+public class TelnetServerStart {
   private final ExecutorService executeIt;
   private static final int SERVER_PORT = 9819;
   private static final int NUMBER_OF_POOLS = 2;
   private final CommandProviderImpl provider;
-  private Logger logger;
+  private final Logger logger;
   
-  public TelnetStart() {
+  public TelnetServerStart() {
     executeIt = Executors.newFixedThreadPool(NUMBER_OF_POOLS);
     provider = new CommandProviderImpl();
     logger = Logger.getLogger(this.getClass().getName());
